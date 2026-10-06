@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Free online calculators India - EMI, SIP, GST, Salary, Income Tax, FD Calculator"/>
+  <meta name="keywords" content="EMI calculator, SIP calculator, GST calculator, salary calculator, income tax calculator FY 2025-26, FD calculator India"/>
+  <title>CalcHub — Free Financial Calculators India</title>
+  <meta name="google-site-verification" content="kIcXpOJ64A8CKpSJZWY20k6Dmf_V4iHd_V_DR5m4uxQ" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --success: #16a34a;
+      --success-light: #f0fdf4;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --sidebar-w: 240px;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 200;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid #1e293b;
+    }
+    .sidebar-logo h1 { font-size: 1.35rem; font-weight: 800; color: #fff; letter-spacing: -.5px; }
+    .sidebar-logo span { font-size: .75rem; color: #64748b; display: block; margin-top: 2px; }
+    .sidebar-nav { padding: 16px 12px; flex: 1; }
+    .nav-label { font-size: .68rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; padding: 8px 8px 6px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px; border-radius: 8px;
+      cursor: pointer; font-size: .875rem; font-weight: 500;
+      color: #94a3b8; transition: all .15s; margin-bottom: 2px;
+    }
+    .nav-item:hover { background: #1e293b; color: #e2e8f0; }
+    .nav-item.active { background: var(--primary); color: #fff; font-weight: 600; }
+    .nav-item .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid #1e293b; font-size: .75rem; color: #475569; }
+
+    /* ── MAIN CONTENT ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: #fff; border-bottom: 1px solid var(--border);
+      padding: 14px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-title { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+    .topbar-badge {
+      background: #dcfce7; color: var(--success); font-size: .72rem;
+      font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: .3px;
+    }
+
+    /* ── AD BANNER ── */
+    .ad-strip {
+      background: linear-gradient(90deg, #eff6ff, #f0fdf4);
+      border: 1px dashed #bfdbfe;
+      text-align: center; padding: 10px 16px;
+      color: #93c5fd; font-size: .78rem; font-weight: 600;
+      letter-spacing: .5px;
+    }
+
+    /* ── PAGE ── */
+    .page { padding: 28px 32px 48px; max-width: 960px; }
+    .calc-section { display: none; }
+    .calc-section.active { display: block; animation: fadeUp .25s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── PAGE HEADER ── */
+    .page-header { margin-bottom: 24px; }
+    .page-header h2 { font-size: 1.5rem; font-weight: 800; color: var(--text); }
+    .page-header p { color: var(--text-muted); font-size: .875rem; margin-top: 4px; }
+
+    /* ── GRID ── */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .card-title { font-size: .8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 20px; }
+
+    /* ── FORM ELEMENTS ── */
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .82rem; font-weight: 600; color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .field label .val-tag {
+      background: var(--primary-light); color: var(--primary);
+      font-size: .8rem; font-weight: 700; padding: 2px 10px; border-radius: 6px;
+    }
+    .input-wrap {
+      position: relative; display: flex; align-items: center;
+    }
+    .input-prefix {
+      position: absolute; left: 14px; font-size: .9rem;
+      font-weight: 700; color: var(--text-muted); pointer-events: none;
+    }
+    input[type="number"], select {
+      width: 100%; padding: 11px 14px 11px 30px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: .95rem; font-family: 'Inter', sans-serif;
+      color: var(--text); background: #fff;
+      outline: none; transition: border .15s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+    select { padding-left: 14px; cursor: pointer; }
+    .no-prefix { padding-left: 14px; }
+
+    /* SLIDER */
+    input[type="range"] {
+      width: 100%; height: 4px; margin-top: 10px;
+      accent-color: var(--primary); cursor: pointer;
+      background: linear-gradient(to right, var(--primary) var(--pct, 50%), var(--border) var(--pct, 50%));
+      border-radius: 4px; border: none; outline: none;
+      -webkit-appearance: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px;
+      border-radius: 50%; background: var(--primary);
+      box-shadow: 0 1px 4px rgba(37,99,235,.4); cursor: pointer;
+    }
+
+    /* CALCULATE BUTTON */
+    .calc-btn {
+      width: 100%; padding: 13px;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: 10px;
+      font-size: .95rem; font-weight: 700; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: background .15s, transform .1s;
+      margin-top: 4px; letter-spacing: .2px;
+    }
+    .calc-btn:hover { background: var(--primary-dark); }
+    .calc-btn:active { transform: scale(.99); }
+
+    /* ── RESULT CARD ── */
+    .result-card {
+      display: none; background: var(--card);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .result-card.show { display: block; animation: fadeUp .25s ease; }
+    .result-header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #fff; padding: 20px 24px;
+    }
+    .result-header .main-label { font-size: .75rem; font-weight: 600; opacity: .75; text-transform: uppercase; letter-spacing: .8px; }
+    .result-header .main-val { font-size: 2rem; font-weight: 800; margin-top: 4px; letter-spacing: -.5px; }
+    .result-body { padding: 0 }
+    .result-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 13px 24px; border-bottom: 1px solid var(--border);
+      font-size: .875rem;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-row .rlabel { color: var(--text-muted); font-weight: 500; }
+    .result-row .rval { font-weight: 700; color: var(--text); }
+    .result-row .rval.green { color: var(--success); }
+    .result-row .rval.red { color: var(--danger); }
+    .result-row .rval.blue { color: var(--primary); }
+
+    /* BAR CHART */
+    .bar-section { padding: 20px 24px; border-top: 1px solid var(--border); }
+    .bar-title { font-size: .75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 12px; }
+    .bar-wrap { background: #f1f5f9; border-radius: 6px; height: 10px; overflow: hidden; display: flex; }
+    .bar-seg { height: 100%; transition: width .6s ease; }
+    .bar-legend { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+    .bar-legend-item { display: flex; align-items: center; gap: 6px; font-size: .78rem; color: var(--text-muted); }
+    .bar-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      background: #eff6ff; border: 1px solid #bfdbfe;
+      border-radius: var(--radius); padding: 16px 20px; margin-top: 20px;
+    }
+    .info-box h4 { font-size: .82rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .info-box p, .info-box li { font-size: .82rem; color: #1e40af; line-height: 1.7; }
+    .info-box ul { padding-left: 14px; }
+
+    /* ── AD SIDE ── */
+    .ad-box {
+      background: #fff; border: 1px dashed #cbd5e1;
+      border-radius: var(--radius); padding: 40px 16px;
+      text-align: center; color: var(--text-light); font-size: .78rem;
+      font-weight: 600; letter-spacing: .3px; margin-top: 20px;
+    }
+
+    /* ── MOBILE ── */
+    .mobile-bar {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0;
+      background: #0f172a; z-index: 300; padding: 8px 4px 10px;
+      display: none; justify-content: space-around;
+    }
+    .mob-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 3px; font-size: .65rem; color: #64748b; cursor: pointer;
+      padding: 4px 8px; border-radius: 8px; transition: color .15s;
+    }
+    .mob-item .mob-icon { font-size: 1.2rem; }
+    .mob-item.active { color: #60a5fa; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .topbar { padding: 12px 16px; }
+      .page { padding: 16px 16px 80px; }
+      .grid { grid-template-columns: 1fr; }
+      .mobile-bar { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h1>🧮 CalcHub</h1>
+      <span>Financial Calculators India</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Calculators</div>
+      <div class="nav-item active" onclick="showTab('emi',this)"><span class="icon">🏠</span> EMI Calculator</div>
+      <div class="nav-item" onclick="showTab('sip',this)"><span class="icon">📈</span> SIP Calculator</div>
+      <div class="nav-item" onclick="showTab('gst',this)"><span class="icon">🧾</span> GST Calculator</div>
+      <div class="nav-item" onclick="showTab('salary',this)"><span class="icon">💰</span> Salary Calculator</div>
+      <div class="nav-item" onclick="showTab('tax',this)"><span class="icon">📊</span> Income Tax</div>
+      <div class="nav-item" onclick="showTab('fd',this)"><span class="icon">🏦</span> FD Calculator</div>
+    </nav>
+    <div class="sidebar-footer">© 2025 CalcHub. Free to use.</div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+    <div class="ad-strip">📢 ADVERTISEMENT — Google AdSense (728×90)</div>
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">EMI Calculator</div>
+      <div class="topbar-badge">✓ Free & Accurate</div>
+    </div>
+
+    <div class="page">
+
+      <!-- ═══════════ EMI ═══════════ -->
+      <div id="emi" class="calc-section active">
+        <div class="page-header">
+          <h2>🏠 EMI Calculator</h2>
+          <p>Calculate monthly EMI for Home Loan, Car Loan, or Personal Loan</p>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">Loan Details</div>
+
+            <div class="field">
+              <label>Loan Amount <span class="val-tag" id="emi-p-tag">₹5,00,000</span></label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="emi-p" value="500000" oninput="syncSlider('emi-p','emi-ps',1e4,1e7);calcEMI()"/>
+              </div>
+              <input type="range" id="emi-ps" min="10000" max="10000000" step="10000" value="500000" oninput="syncInput('emi-ps','emi-p','emi-p-tag','₹',true);calcEMI()"/>
+            </div>
+
+            <div class="field">
+              <label>Annual Interest Rate <span class="val-tag" id="emi-r-tag">8.5%</span></label>
+              <div class="input-wrap"><span class="input-prefix" style="font-size:.85rem;">%</span>
+                <input type="number" id="emi-r" value="8.5" step="0.1" min="1" max="30" oninput="syncSlider('emi-r','emi-rs',1,30);calcEMI()"/>
+              </div>
+              <input type="range" id="emi-rs" min="1" max="30" step="0.1" value="8.5" oninput="syncInput('emi-rs','emi-r','emi-r-tag','','false');calcEMI()"/>
+            </div>
+
+            <div class="field">
+              <label>Loan Tenure <span class="val-tag" id="emi-t-tag">60 months</span></label>
+              <div class="input-wrap"><span class="input-prefix" style="opacity:0">₹</span>
+                <input type="number" id="emi-t" class="no-prefix" value="60" min="1" max="360" oninput="syncSlider('emi-t','emi-ts',1,360);calcEMI()"/>
+              </div>
+              <input type="range" id="emi-ts" min="1" max="360" step="1" value="60" oninput="syncInput('emi-ts','emi-t','emi-t-tag','',' months');calcEMI()"/>
+            </div>
+
+            <button class="calc-btn" onclick="calcEMI()">Calculate EMI →</button>
+          </div>
+
+          <div>
+            <div class="result-card show" id="emi-res">
+              <div class="result-header">
+                <div class="main-label">Monthly EMI</div>
+                <div class="main-val" id="emi-monthly">₹10,220</div>
+              </div>
+              <div class="result-body">
+                <div class="result-row"><span class="rlabel">Principal Amount</span><span class="rval blue" id="emi-pr">₹5,00,000</span></div>
+                <div class="result-row"><span class="rlabel">Total Interest</span><span class="rval red" id="emi-int">₹1,13,200</span></div>
+                <div class="result-row"><span class="rlabel">Total Payment</span><span class="rval" id="emi-tot">₹6,13,200</span></div>
+              </div>
+              <div class="bar-section">
+                <div class="bar-title">Breakup</div>
+                <div class="bar-wrap">
+                  <div class="bar-seg" id="emi-bar1" style="background:var(--primary); width:50%"></div>
+                  <div class="bar-seg" id="emi-bar2" style="background:#fca5a5; width:50%"></div>
+                </div>
+                <div class="bar-legend">
+                  <div class="bar-legend-item"><div class="bar-dot" style="background:var(--primary)"></div>Principal</div>
+                  <div class="bar-legend-item"><div class="bar-dot" style="background:#fca5a5"></div>Interest</div>
+                </div>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>💡 EMI Formula</h4>
+              <p>EMI = P × r × (1+r)ⁿ ÷ ((1+r)ⁿ – 1)<br/>Lower tenure = Less interest but higher EMI</p>
+            </div>
+            <div class="ad-box">📢 Advertisement (300×250) — Google AdSense</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SIP ═══════════ -->
+      <div id="sip" class="calc-section">
+        <div class="page-header"><h2>📈 SIP Calculator</h2><p>Calculate returns on your Systematic Investment Plan in Mutual Funds</p></div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">Investment Details</div>
+            <div class="field">
+              <label>Monthly Investment <span class="val-tag" id="sip-m-tag">₹5,000</span></label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="sip-m" value="5000" oninput="syncSlider('sip-m','sip-ms',500,100000);calcSIP()"/>
+              </div>
+              <input type="range" id="sip-ms" min="500" max="100000" step="500" value="5000" oninput="syncInput('sip-ms','sip-m','sip-m-tag','₹',true);calcSIP()"/>
+            </div>
+            <div class="field">
+              <label>Expected Annual Return <span class="val-tag" id="sip-r-tag">12%</span></label>
+              <div class="input-wrap"><span class="input-prefix" style="font-size:.85rem">%</span>
+                <input type="number" id="sip-r" value="12" step="0.5" min="1" max="30" oninput="syncSlider('sip-r','sip-rs',1,30);calcSIP()"/>
+              </div>
+              <input type="range" id="sip-rs" min="1" max="30" step="0.5" value="12" oninput="syncInput('sip-rs','sip-r','sip-r-tag','','%');calcSIP()"/>
+            </div>
+            <div class="field">
+              <label>Investment Period <span class="val-tag" id="sip-y-tag">10 years</span></label>
+              <div class="input-wrap"><span class="input-prefix" style="opacity:0">₹</span>
+                <input type="number" id="sip-y" class="no-prefix" value="10" min="1" max="40" oninput="syncSlider('sip-y','sip-ys',1,40);calcSIP()"/>
+              </div>
+              <input type="range" id="sip-ys" min="1" max="40" step="1" value="10" oninput="syncInput('sip-ys','sip-y','sip-y-tag','',' years');calcSIP()"/>
+            </div>
+            <button class="calc-btn" onclick="calcSIP()">Calculate Returns →</button>
+          </div>
+          <div>
+            <div class="result-card show" id="sip-res">
+              <div class="result-header">
+                <div class="main-label">Total Value at Maturity</div>
+                <div class="main-val" id="sip-total">₹11,61,695</div>
+              </div>
+              <div class="result-body">
+                <div class="result-row"><span class="rlabel">Amount Invested</span><span class="rval blue" id="sip-inv">₹6,00,000</span></div>
+                <div class="result-row"><span class="rlabel">Estimated Returns</span><span class="rval green" id="sip-ret">₹5,61,695</span></div>
+                <div class="result-row"><span class="rlabel">Wealth Gained</span><span class="rval green" id="sip-gain">+93.6%</span></div>
+              </div>
+              <div class="bar-section">
+                <div class="bar-title">Investment vs Returns</div>
+                <div class="bar-wrap">
+                  <div class="bar-seg" id="sip-bar1" style="background:var(--primary); width:52%"></div>
+                  <div class="bar-seg" id="sip-bar2" style="background:#4ade80; width:48%"></div>
+                </div>
+                <div class="bar-legend">
+                  <div class="bar-legend-item"><div class="bar-dot" style="background:var(--primary)"></div>Invested</div>
+                  <div class="bar-legend-item"><div class="bar-dot" style="background:#4ade80"></div>Returns</div>
+                </div>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>💡 Why SIP?</h4>
+              <p>SIP harnesses the power of compounding. The longer you invest, the more your money grows exponentially. Even ₹1,000/month can build lakhs over time!</p>
+            </div>
+            <div class="ad-box">📢 Advertisement (300×250) — Google AdSense</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ GST ═══════════ -->
+      <div id="gst" class="calc-section">
+        <div class="page-header"><h2>🧾 GST Calculator</h2><p>Calculate GST amount — both inclusive & exclusive</p></div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">GST Details</div>
+            <div class="field">
+              <label>Amount (₹)</label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="gst-amt" value="10000" oninput="calcGST()"/>
+              </div>
+            </div>
+            <div class="field">
+              <label>GST Rate</label>
+              <select id="gst-rate" onchange="gstRateChange();calcGST()">
+                <option value="5">5% — Essential goods</option>
+                <option value="12">12% — Processed food, computers</option>
+                <option value="18" selected>18% — Services, electronics</option>
+                <option value="28">28% — Luxury, automobiles</option>
+                <option value="custom">Custom Rate</option>
+              </select>
+            </div>
+            <div class="field" id="gst-custom-field" style="display:none">
+              <label>Custom Rate (%)</label>
+              <div class="input-wrap"><span class="input-prefix" style="font-size:.85rem">%</span>
+                <input type="number" id="gst-custom" placeholder="Enter rate" oninput="calcGST()"/>
+              </div>
+            </div>
+            <div class="field">
+              <label>Calculation Type</label>
+              <select id="gst-type" onchange="calcGST()">
+                <option value="ex">Exclusive (Add GST to amount)</option>
+                <option value="in">Inclusive (GST included in amount)</option>
+              </select>
+            </div>
+            <button class="calc-btn" onclick="calcGST()">Calculate GST →</button>
+          </div>
+          <div>
+            <div class="result-card show" id="gst-res">
+              <div class="result-header">
+                <div class="main-label">Total GST Amount</div>
+                <div class="main-val" id="gst-tax-main">₹1,800</div>
+              </div>
+              <div class="result-body">
+                <div class="result-row"><span class="rlabel">Original Amount</span><span class="rval" id="gst-orig">₹10,000</span></div>
+                <div class="result-row"><span class="rlabel">CGST (Central)</span><span class="rval" id="gst-cgst">₹900</span></div>
+                <div class="result-row"><span class="rlabel">SGST (State)</span><span class="rval" id="gst-sgst">₹900</span></div>
+                <div class="result-row"><span class="rlabel">Total Payable</span><span class="rval blue" id="gst-total">₹11,800</span></div>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>📋 GST Slab Rates</h4>
+              <ul>
+                <li>5% — Food items, transport, healthcare</li>
+                <li>12% — Computers, processed food</li>
+                <li>18% — Services, restaurants, electronics</li>
+                <li>28% — Luxury goods, cars, tobacco</li>
+              </ul>
+            </div>
+            <div class="ad-box">📢 Advertisement (300×250) — Google AdSense</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SALARY ═══════════ -->
+      <div id="salary" class="calc-section">
+        <div class="page-header"><h2>💰 In-Hand Salary Calculator</h2><p>Calculate your monthly take-home salary from your CTC</p></div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">Salary Details</div>
+            <div class="field">
+              <label>Annual CTC (₹) <span class="val-tag" id="sal-ctc-tag">₹6,00,000</span></label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="sal-ctc" value="600000" oninput="syncSlider('sal-ctc','sal-ctcs',100000,5000000);calcSalary()"/>
+              </div>
+              <input type="range" id="sal-ctcs" min="100000" max="5000000" step="10000" value="600000" oninput="syncInput('sal-ctcs','sal-ctc','sal-ctc-tag','₹',true);calcSalary()"/>
+            </div>
+            <div class="field">
+              <label>Monthly Basic Salary (₹)</label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="sal-basic" value="20000" oninput="calcSalary()"/>
+              </div>
+            </div>
+            <div class="field">
+              <label>PF Contribution</label>
+              <select id="sal-pf" onchange="calcSalary()">
+                <option value="12">12% of Basic (Standard)</option>
+                <option value="0">Not Applicable</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Professional Tax (₹/month)</label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="sal-pt" value="200" oninput="calcSalary()"/>
+              </div>
+            </div>
+            <button class="calc-btn" onclick="calcSalary()">Calculate In-Hand →</button>
+          </div>
+          <div>
+            <div class="result-card show" id="sal-res">
+              <div class="result-header">
+                <div class="main-label">Monthly In-Hand Salary</div>
+                <div class="main-val" id="sal-inhand">₹47,400</div>
+              </div>
+              <div class="result-body">
+                <div class="result-row"><span class="rlabel">Annual CTC</span><span class="rval" id="sal-ctc-show">₹6,00,000</span></div>
+                <div class="result-row"><span class="rlabel">Monthly Gross</span><span class="rval" id="sal-gross">₹50,000</span></div>
+                <div class="result-row"><span class="rlabel">PF Deduction</span><span class="rval red" id="sal-pf-show">–₹2,400</span></div>
+                <div class="result-row"><span class="rlabel">Professional Tax</span><span class="rval red" id="sal-pt-show">–₹200</span></div>
+                <div class="result-row"><span class="rlabel">Annual In-Hand</span><span class="rval green" id="sal-annual">₹5,68,800</span></div>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>💡 CTC vs In-Hand</h4>
+              <p>Your actual take-home is typically <strong>70–80% of CTC</strong>. CTC includes employer PF, gratuity, medical allowance, and other benefits.</p>
+            </div>
+            <div class="ad-box">📢 Advertisement (300×250) — Google AdSense</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ INCOME TAX ═══════════ -->
+      <div id="tax" class="calc-section">
+        <div class="page-header"><h2>📊 Income Tax Calculator</h2><p>FY 2025-26 (AY 2026-27) — New & Old Regime</p></div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">Tax Details</div>
+            <div class="field">
+              <label>Annual Income (₹) <span class="val-tag" id="tax-inc-tag">₹8,00,000</span></label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="tax-inc" value="800000" oninput="syncSlider('tax-inc','tax-incs',100000,10000000);calcTax()"/>
+              </div>
+              <input type="range" id="tax-incs" min="100000" max="10000000" step="10000" value="800000" oninput="syncInput('tax-incs','tax-inc','tax-inc-tag','₹',true);calcTax()"/>
+            </div>
+            <div class="field">
+              <label>Tax Regime</label>
+              <select id="tax-regime" onchange="taxRegimeChange();calcTax()">
+                <option value="new">New Regime (Default from FY25-26)</option>
+                <option value="old">Old Regime</option>
+              </select>
+            </div>
+            <div id="tax-old-fields" style="display:none">
+              <div class="field">
+                <label>80C Deductions (max ₹1,50,000)</label>
+                <div class="input-wrap"><span class="input-prefix">₹</span>
+                  <input type="number" id="tax-80c" value="150000" max="150000" oninput="calcTax()"/>
+                </div>
+              </div>
+              <div class="field">
+                <label>HRA Exemption (₹)</label>
+                <div class="input-wrap"><span class="input-prefix">₹</span>
+                  <input type="number" id="tax-hra" value="0" oninput="calcTax()"/>
+                </div>
+              </div>
+              <div class="field">
+                <label>Other Deductions (₹)</label>
+                <div class="input-wrap"><span class="input-prefix">₹</span>
+                  <input type="number" id="tax-other" value="0" oninput="calcTax()"/>
+                </div>
+              </div>
+            </div>
+            <button class="calc-btn" onclick="calcTax()">Calculate Tax →</button>
+          </div>
+          <div>
+            <div class="result-card show" id="tax-res">
+              <div class="result-header">
+                <div class="main-label">Total Tax Payable</div>
+                <div class="main-val" id="tax-total">₹0</div>
+              </div>
+              <div class="result-body">
+                <div class="result-row"><span class="rlabel">Gross Income</span><span class="rval" id="tax-gross">₹8,00,000</span></div>
+                <div class="result-row"><span class="rlabel">Taxable Income</span><span class="rval" id="tax-taxable">₹7,25,000</span></div>
+                <div class="result-row"><span class="rlabel">Income Tax</span><span class="rval" id="tax-amt">₹0</span></div>
+                <div class="result-row"><span class="rlabel">Cess (4%)</span><span class="rval" id="tax-cess">₹0</span></div>
+                <div class="result-row"><span class="rlabel">Effective Tax Rate</span><span class="rval" id="tax-eff">0%</span></div>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>📋 New Regime Slabs (FY 2025-26)</h4>
+              <ul>
+                <li>Up to ₹3L — 0%</li>
+                <li>₹3L – ₹7L — 5%</li>
+                <li>₹7L – ₹10L — 10%</li>
+                <li>₹10L – ₹12L — 15%</li>
+                <li>₹12L – ₹15L — 20%</li>
+                <li>Above ₹15L — 30%</li>
+                <li>✅ Zero tax if income ≤ ₹12L (Rebate 87A)</li>
+              </ul>
+            </div>
+            <div class="ad-box">📢 Advertisement (300×250) — Google AdSense</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ FD ═══════════ -->
+      <div id="fd" class="calc-section">
+        <div class="page-header"><h2>🏦 FD Calculator</h2><p>Calculate Fixed Deposit maturity amount with compounding</p></div>
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">FD Details</div>
+            <div class="field">
+              <label>Principal Amount <span class="val-tag" id="fd-p-tag">₹1,00,000</span></label>
+              <div class="input-wrap"><span class="input-prefix">₹</span>
+                <input type="number" id="fd-p" value="100000" oninput="syncSlider('fd-p','fd-ps',10000,5000000);calcFD()"/>
+              </div>
+              <input type="range" id="fd-ps" min="10000" max="5000000" step="10000" value="100000" oninput="syncInput('fd-ps','fd-p','fd-p-tag','₹',true);calcFD()"/>
+            </div>
+            <div class="field">
+              <label>Annual Interest Rate <span class="val-tag" id="fd-r-tag">7.5%</span></label>
+              <div class="input-wrap"><span class="input-prefix" style="font-size:.85rem">%</span>
+                <input type="number" id="fd-r" value="7.5" step="0.1" min="1" max="15" oninput="syncSlider('fd-r','fd-rs',1,15);calcFD()"/>
+              </div>
+              <input type="range" id="fd-rs" min="1" max="15" step="0.1" value="7.5" oninput="syncInput('fd-rs','fd-r','fd-r-tag','','%');calcFD()"/>
+            </div>
+            <div class="field">
+              <label>Duration <span class="val-tag" id="fd-y-tag">3 years</span></label>
+              <div class="input-wrap"><span class="input-prefix" style="opacity:0">₹</span>
+                <input type="number" id="fd-y" class="no-prefix" value="3" min="1" max="10" oninput="syncSlider('fd-y','fd-ys',1,10);calcFD()"/>
+              </div>
+              <input type="range" id="fd-ys" min="1" max="10" step="1" value="3" oninput="syncInput('fd-ys','fd-y','fd-y-tag','',' years');calcFD()"/>
+            </div>
+            <div class="field">
+              <label>Compounding</label>
+              <select id="fd-freq" onchange="calcFD()">
+                <option value="4">Quarterly (Standard)</option>
+                <option value="12">Monthly</option>
+                <option value="2">Half-Yearly</option>
+                <option value="1">Yearly</option>
+              </select>
+            </div>
+            <button class="calc-btn" onclick="calcFD()">Calculate Returns →</button>
+          </div>
+          <div>
+            <div class="result-card show" id="fd-res">
+              <div class="result-header">
+                <div class="main-label">Maturity Amount</div>
+                <div class="main-val" id="fd-maturity">₹1,25,065</div>
+              </div>
+              <div class="result-body">
+                <div class="result-row"><span class="rlabel">Principal</span><span class="rval blue" id="fd-pr">₹1,00,000</span></div>
+                <div class="result-row"><span class="rlabel">Interest Earned</span><span class="rval green" id="fd-int">₹25,065</span></div>
+                <div class="result-row"><span class="rlabel">Effective Yield</span><span class="rval" id="fd-yield">7.71%</span></div>
+              </div>
+              <div class="bar-section">
+                <div class="bar-title">Principal vs Interest</div>
+                <div class="bar-wrap">
+                  <div class="bar-seg" id="fd-bar1" style="background:var(--primary); width:80%"></div>
+                  <div class="bar-seg" id="fd-bar2" style="background:#4ade80; width:20%"></div>
+                </div>
+                <div class="bar-legend">
+                  <div class="bar-legend-item"><div class="bar-dot" style="background:var(--primary)"></div>Principal</div>
+                  <div class="bar-legend-item"><div class="bar-dot" style="background:#4ade80"></div>Interest</div>
+                </div>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>🏦 Top FD Rates (2025)</h4>
+              <ul>
+                <li>SBI — 7.10% (1-2 years)</li>
+                <li>HDFC — 7.40% (15 months)</li>
+                <li>Post Office — 7.50% (1 year)</li>
+                <li>Senior Citizens get extra 0.25–0.50%</li>
+              </ul>
+            </div>
+            <div class="ad-box">📢 Advertisement (300×250) — Google AdSense</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-bar" id="mob-bar">
+  <div class="mob-item active" onclick="showTab('emi',this,true)"><span class="mob-icon">🏠</span>EMI</div>
+  <div class="mob-item" onclick="showTab('sip',this,true)"><span class="mob-icon">📈</span>SIP</div>
+  <div class="mob-item" onclick="showTab('gst',this,true)"><span class="mob-icon">🧾</span>GST</div>
+  <div class="mob-item" onclick="showTab('salary',this,true)"><span class="mob-icon">💰</span>Salary</div>
+  <div class="mob-item" onclick="showTab('tax',this,true)"><span class="mob-icon">📊</span>Tax</div>
+  <div class="mob-item" onclick="showTab('fd',this,true)"><span class="mob-icon">🏦</span>FD</div>
+</div>
+
+<script>
+  /* ─── UTILS ─── */
+  const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+  const fmtD = n => '₹' + n.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0});
+  const pct = (a,b) => Math.round(a/(a+b)*100);
+
+  const titles = {emi:'EMI Calculator',sip:'SIP Calculator',gst:'GST Calculator',salary:'Salary Calculator',tax:'Income Tax Calculator',fd:'FD Calculator'};
+
+  function showTab(id, el, isMob=false) {
+    document.querySelectorAll('.calc-section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('topbar-title').textContent = titles[id];
+    if (isMob) {
+      document.querySelectorAll('.mob-item').forEach(b=>b.classList.remove('active'));
+    } else {
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    }
+    el.classList.add('active');
+  }
+
+  function syncSlider(inputId, sliderId, min, max) {
+    const v = parseFloat(document.getElementById(inputId).value)||min;
+    const s = document.getElementById(sliderId);
+    s.value = Math.min(Math.max(v, min), max);
+    updateSliderBg(s);
+  }
+
+  function syncInput(sliderId, inputId, tagId, prefix, suffix) {
+    const v = parseFloat(document.getElementById(sliderId).value);
+    document.getElementById(inputId).value = v;
+    const min = parseFloat(document.getElementById(sliderId).min);
+    const max = parseFloat(document.getElementById(sliderId).max);
+    if (tagId) {
+      let display = '';
+      if (prefix === '₹' && suffix === true) display = fmt(v);
+      else display = prefix + v + (suffix && suffix !== true ? suffix : '');
+      document.getElementById(tagId).textContent = display;
+    }
+    updateSliderBg(document.getElementById(sliderId));
+  }
+
+  function updateSliderBg(slider) {
+    const min = parseFloat(slider.min), max = parseFloat(slider.max), val = parseFloat(slider.value);
+    const p = ((val - min) / (max - min)) * 100;
+    slider.style.setProperty('--pct', p + '%');
+  }
+
+  // init all sliders
+  document.querySelectorAll('input[type=range]').forEach(s => updateSliderBg(s));
+
+  /* ─── GST helpers ─── */
+  function gstRateChange() {
+    const v = document.getElementById('gst-rate').value;
+    document.getElementById('gst-custom-field').style.display = v === 'custom' ? 'block' : 'none';
+  }
+  function taxRegimeChange() {
+    const v = document.getElementById('tax-regime').value;
+    document.getElementById('tax-old-fields').style.display = v === 'old' ? 'block' : 'none';
+  }
+
+  /* ─── EMI ─── */
+  function calcEMI() {
+    const P = parseFloat(document.getElementById('emi-p').value)||0;
+    const ann = parseFloat(document.getElementById('emi-r').value)||0;
+    const n = parseInt(document.getElementById('emi-t').value)||1;
+    document.getElementById('emi-p-tag').textContent = fmt(P);
+    document.getElementById('emi-r-tag').textContent = ann + '%';
+    document.getElementById('emi-t-tag').textContent = n + ' months';
+    if (!P||!ann||!n) return;
+    const r = ann/12/100;
+    const emi = P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+    const total = emi*n, interest = total-P;
+    document.getElementById('emi-monthly').textContent = fmt(emi);
+    document.getElementById('emi-pr').textContent = fmt(P);
+    document.getElementById('emi-int').textContent = fmt(interest);
+    document.getElementById('emi-tot').textContent = fmt(total);
+    const pp = pct(P,interest);
+    document.getElementById('emi-bar1').style.width = pp+'%';
+    document.getElementById('emi-bar2').style.width = (100-pp)+'%';
+  }
+
+  /* ─── SIP ─── */
+  function calcSIP() {
+    const m = parseFloat(document.getElementById('sip-m').value)||0;
+    const ann = parseFloat(document.getElementById('sip-r').value)||0;
+    const y = parseInt(document.getElementById('sip-y').value)||1;
+    document.getElementById('sip-m-tag').textContent = fmt(m);
+    document.getElementById('sip-r-tag').textContent = ann + '%';
+    document.getElementById('sip-y-tag').textContent = y + ' years';
+    if (!m||!ann||!y) return;
+    const r = ann/12/100, n = y*12;
+    const total = m*((Math.pow(1+r,n)-1)/r)*(1+r);
+    const invested = m*n, returns = total-invested;
+    document.getElementById('sip-total').textContent = fmt(total);
+    document.getElementById('sip-inv').textContent = fmt(invested);
+    document.getElementById('sip-ret').textContent = fmt(returns);
+    document.getElementById('sip-gain').textContent = '+' + ((returns/invested)*100).toFixed(1) + '%';
+    const pp = pct(invested, returns);
+    document.getElementById('sip-bar1').style.width = pp+'%';
+    document.getElementById('sip-bar2').style.width = (100-pp)+'%';
+  }
+
+  /* ─── GST ─── */
+  function calcGST() {
+    const amt = parseFloat(document.getElementById('gst-amt').value)||0;
+    const rv = document.getElementById('gst-rate').value;
+    const rate = rv === 'custom' ? (parseFloat(document.getElementById('gst-custom').value)||0) : parseFloat(rv);
+    const type = document.getElementById('gst-type').value;
+    if (!amt||!rate) return;
+    let orig, gstAmt, total;
+    if (type === 'ex') { orig = amt; gstAmt = amt*rate/100; total = amt+gstAmt; }
+    else { total = amt; orig = amt*100/(100+rate); gstAmt = total-orig; }
+    document.getElementById('gst-tax-main').textContent = fmt(gstAmt);
+    document.getElementById('gst-orig').textContent = fmt(orig);
+    document.getElementById('gst-cgst').textContent = fmt(gstAmt/2);
+    document.getElementById('gst-sgst').textContent = fmt(gstAmt/2);
+    document.getElementById('gst-total').textContent = fmt(total);
+  }
+
+  /* ─── SALARY ─── */
+  function calcSalary() {
+    const ctc = parseFloat(document.getElementById('sal-ctc').value)||0;
+    const basic = parseFloat(document.getElementById('sal-basic').value)||0;
+    const pfPct = parseFloat(document.getElementById('sal-pf').value)||0;
+    const pt = parseFloat(document.getElementById('sal-pt').value)||0;
+    document.getElementById('sal-ctc-tag').textContent = fmt(ctc);
+    if (!ctc) return;
+    const gross = ctc/12;
+    const pf = basic*pfPct/100;
+    const inhand = gross - pf - pt;
+    document.getElementById('sal-inhand').textContent = fmt(inhand);
+    document.getElementById('sal-ctc-show').textContent = fmt(ctc);
+    document.getElementById('sal-gross').textContent = fmt(gross);
+    document.getElementById('sal-pf-show').textContent = '–' + fmt(pf);
+    document.getElementById('sal-pt-show').textContent = '–' + fmt(pt);
+    document.getElementById('sal-annual').textContent = fmt(inhand*12);
+  }
+
+  /* ─── INCOME TAX ─── */
+  function calcTax() {
+    const income = parseFloat(document.getElementById('tax-inc').value)||0;
+    const regime = document.getElementById('tax-regime').value;
+    document.getElementById('tax-inc-tag').textContent = fmt(income);
+    if (!income) return;
+    let taxable = income, tax = 0;
+    if (regime === 'new') {
+      taxable = Math.max(0, income - 75000);
+      if (taxable <= 300000) tax = 0;
+      else if (taxable <= 700000) tax = (taxable-300000)*0.05;
+      else if (taxable <= 1000000) tax = 20000+(taxable-700000)*0.10;
+      else if (taxable <= 1200000) tax = 50000+(taxable-1000000)*0.15;
+      else if (taxable <= 1500000) tax = 80000+(taxable-1200000)*0.20;
+      else tax = 140000+(taxable-1500000)*0.30;
+      if (income <= 1200000) tax = 0;
+    } else {
+      const c80 = Math.min(parseFloat(document.getElementById('tax-80c').value)||0, 150000);
+      const hra = parseFloat(document.getElementById('tax-hra').value)||0;
+      const other = parseFloat(document.getElementById('tax-other').value)||0;
+      taxable = Math.max(0, income - 50000 - c80 - hra - other);
+      if (taxable <= 250000) tax = 0;
+      else if (taxable <= 500000) tax = (taxable-250000)*0.05;
+      else if (taxable <= 1000000) tax = 12500+(taxable-500000)*0.20;
+      else tax = 112500+(taxable-1000000)*0.30;
+      if (taxable <= 500000) tax = 0;
+    }
+    const cess = tax*0.04, total = tax+cess;
+    const eff = income > 0 ? (total/income*100).toFixed(2) : 0;
+    document.getElementById('tax-total').textContent = fmt(total);
+    document.getElementById('tax-gross').textContent = fmt(income);
+    document.getElementById('tax-taxable').textContent = fmt(taxable);
+    document.getElementById('tax-amt').textContent = fmt(tax);
+    document.getElementById('tax-cess').textContent = fmt(cess);
+    document.getElementById('tax-eff').textContent = eff + '%';
+  }
+
+  /* ─── FD ─── */
+  function calcFD() {
+    const P = parseFloat(document.getElementById('fd-p').value)||0;
+    const r = parseFloat(document.getElementById('fd-r').value)||0;
+    const t = parseFloat(document.getElementById('fd-y').value)||1;
+    const n = parseInt(document.getElementById('fd-freq').value)||4;
+    document.getElementById('fd-p-tag').textContent = fmt(P);
+    document.getElementById('fd-r-tag').textContent = r + '%';
+    document.getElementById('fd-y-tag').textContent = t + ' years';
+    if (!P||!r) return;
+    const maturity = P*Math.pow((1+r/(n*100)),n*t);
+    const interest = maturity-P;
+    const effYield = (Math.pow(1+r/(n*100),n)-1)*100;
+    document.getElementById('fd-maturity').textContent = fmt(maturity);
+    document.getElementById('fd-pr').textContent = fmt(P);
+    document.getElementById('fd-int').textContent = fmt(interest);
+    document.getElementById('fd-yield').textContent = effYield.toFixed(2)+'%';
+    const pp = pct(P, interest);
+    document.getElementById('fd-bar1').style.width = pp+'%';
+    document.getElementById('fd-bar2').style.width = (100-pp)+'%';
+  }
+
+  // Init all on load
+  calcEMI(); calcSIP(); calcGST(); calcSalary(); calcTax(); calcFD();
+</script>
+</body>
+</html>
